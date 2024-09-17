@@ -1,0 +1,28 @@
+name: Push model to Replicate
+
+on:
+  push:
+    branches:
+      - main  # Ana branch'e her push yapıldığında çalışır
+
+jobs:
+  push-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  # GitHub Actions repository'nizdeki dosyaları çeker
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install Replicate CLI
+        run: pip install replicate  # Replicate CLI'yi yükler
+
+      - name: Push model to Replicate
+        run: |
+          replicate login --token ${{ secrets.REPLICATE_API_TOKEN }}  # Replicate'e API token ile giriş yapar
+          replicate push --project erayyavuz/interior-ai  # Modelinizi Replicate'e yükler
+
