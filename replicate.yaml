@@ -22,11 +22,11 @@ inputs:
   guidance_scale:
     type: number
     default: 7.5
-    description: "Guidance scale for image generation."
+    description: "Guidance scale for the model."
   strength:
     type: number
     default: 0.8
-    description: "Strength for img2img transformation."
+    description: "Image transformation strength."
   seed:
     type: integer
     default: null
@@ -36,7 +36,3 @@ inputs:
 outputs:
   - type: image
     description: "Generated interior design image."
-
-# Ortam değişkenleri
-environment:
-  HUGGINGFACE_TOKEN: ${HUGGINGFACE_TOKEN}
