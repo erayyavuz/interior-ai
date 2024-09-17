@@ -1,0 +1,42 @@
+schema_version: "0.0.1"
+name: erayyavuz/interior-ai
+description: >
+  AI-powered interior design model using Stable Diffusion and ControlNet technologies.
+
+# Giriş parametreleri
+inputs:
+  input_image:
+    type: image
+    description: "The input image to transform."
+  prompt:
+    type: string
+    description: "The text prompt for image generation."
+  negative_prompt:
+    type: string
+    default: ""
+    description: "Negative text prompt."
+  num_inference_steps:
+    type: integer
+    default: 50
+    description: "Number of inference steps."
+  guidance_scale:
+    type: number
+    default: 7.5
+    description: "Guidance scale for image generation."
+  strength:
+    type: number
+    default: 0.8
+    description: "Strength for img2img transformation."
+  seed:
+    type: integer
+    default: null
+    description: "Random seed for reproducibility."
+
+# Çıktılar
+outputs:
+  - type: image
+    description: "Generated interior design image."
+
+# Ortam değişkenleri
+environment:
+  HUGGINGFACE_TOKEN: ${HUGGINGFACE_TOKEN}
