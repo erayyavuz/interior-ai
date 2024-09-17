@@ -1,13 +1,30 @@
-Run replicate push
-  replicate push
-  shell: /usr/bin/bash -e {0}
-  env:
-    pythonLocation: /opt/hostedtoolcache/Python/3.12.6/x64
-    PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.6/x64/lib/pkgconfig
-    Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.6/x64
-    Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.6/x64
-    Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.6/x64
-    LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.6/x64/lib
-    REPLICATE_API_TOKEN: ***
-/home/runner/work/_temp/bf6006f9-2510-4e9a-a1f6-ccaf240b6dc9.sh: line 1: replicate: command not found
-Error: Process completed with exit code 127.
+name: Push Model to Replicate
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3  # Kodları indirir
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'  # Python sürümünü ayarlar
+
+      - name: Install Replicate CLI
+        run: |
+          python -m pip install --user replicate  # Replicate CLI'yi kurar
+          echo "$HOME/.local/bin" >> $GITHUB_PATH  # Local bin dizinini PATH'e ekler
+          export PATH="$HOME/.local/bin:$PATH"  # PATH'i günceller
+          replicate --version  # Replicate CLI'nin kurulu olduğunu kontrol eder
+
+      - name: Push the model to Replicate
+        run: replicate push  # Modeli Replicate'e gönderir
+        env:
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}  # API token'ı kullanır
