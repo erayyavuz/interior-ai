@@ -1,0 +1,9 @@
+torch==1.13.1
+diffusers==0.14.0
+transformers==4.27.1
+controlnet-aux==0.0.5
+huggingface-hub==0.13.3
+Pillow==9.4.0
+numpy==1.23.5
+xformers==0.0.16
+
