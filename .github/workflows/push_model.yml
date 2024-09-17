@@ -11,18 +11,20 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # GitHub Actions repository'nizdeki dosyaları çeker
+        uses: actions/checkout@v3  # Repository'nizi checkout yapar
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: "3.x"  # Python 3.x sürümünü ayarlar
 
-      - name: Install Replicate CLI
-        run: pip install replicate  # Replicate CLI'yi yükler
+      - name: Install pipx and Replicate CLI
+        run: |
+          python -m pip install --user pipx
+          python -m pipx ensurepath
+          pipx install replicate  # Replicate CLI'yi pipx ile yükler
 
       - name: Push model to Replicate
         run: |
-          replicate login --token ${{ secrets.REPLICATE_API_TOKEN }}  # Replicate'e API token ile giriş yapar
-          replicate push --project erayyavuz/interior-ai  # Modelinizi Replicate'e yükler
-
+          replicate login --token ${{ secrets.REPLICATE_API_TOKEN }}  # API token ile giriş yapar
+          replicate push --project erayyavuz/interior-ai  # Modeli Replicate'e yükler
