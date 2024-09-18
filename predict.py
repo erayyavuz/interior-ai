@@ -18,6 +18,7 @@ HUGGINGFACE_TOKEN = os.environ.get("HUGGINGFACE_TOKEN")
 if not HUGGINGFACE_TOKEN:
     raise ValueError("Hugging Face API token bulunamadı. Lütfen HUGGINGFACE_TOKEN ortam değişkenini ayarlayın.")
 else:
+    print(f"Hugging Face API token başarıyla alındı: {HUGGINGFACE_TOKEN[:4]}...")  # Token'ın ilk dört karakterini yazdır
     login(token=HUGGINGFACE_TOKEN)
 
 
