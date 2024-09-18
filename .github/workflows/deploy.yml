@@ -20,19 +20,21 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl python3-pip
 
-      - name: Cog Kurulumu (pip ile)
+      - name: pipx Kurulumu
         run: |
-          pip3 install --user cog
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          python3 -m pip install --user pipx
+          python3 -m pipx ensurepath
+
+      - name: pipx PATH'ini Güncelle
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Cog Kurulumu (pipx ile)
+        run: pipx install cog
 
       - name: Cog'un Yüklü Olduğunu Doğrula
         run: |
           echo "PATH: $PATH"
-          echo "Listing ~/.local/bin:"
-          ls -la $HOME/.local/bin
-          echo "Which cog:"
           which cog
-          echo "Cog versiyonu:"
           cog --version
 
       - name: Replicate’a Push Et
