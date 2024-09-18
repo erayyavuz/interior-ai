@@ -40,17 +40,21 @@ jobs:
             echo "Replicate API token bulundu: $REPLICATE_API_TOKEN"
           fi
         env:
-          HUGGINGFACE_TOKEN: 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  # Token doğrudan burada tanımlandı
+          HUGGINGFACE_TOKEN: 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  # Hugging Face token burada tanımlandı
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
 
-      # 4. Replicate’a Push Etme
+      # 4. Replicate Girişi (cog login)
+      - name: Replicate Girişi Yap
+        run: cog login --token ${{ secrets.REPLICATE_API_TOKEN }}  # Replicate API token kullanarak giriş yapıyoruz
+
+      # 5. Replicate’a Push Et
       - name: Replicate’a Push Et
-        run: cog push r8.im/${{ inputs.model_name }}
+        run: cog push r8.im/${{ inputs.model_name }}  # Model adını dinamik olarak kullanıcının girdiği şekilde ayarlandı
         env:
-          HUGGINGFACE_TOKEN: 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  # Token burada da ayarlandı
-          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+          HUGGINGFACE_TOKEN: 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  # Hugging Face token burada tanımlandı
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}   # Replicate token da burada tanımlandı
 
-      # 5. Hata Ayıklama (Opsiyonel)
+      # 6. Hata Ayıklama (Opsiyonel)
       - name: Ek Hata Ayıklama
         if: failure()
         run: |
