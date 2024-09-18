@@ -20,9 +20,9 @@ jobs:
         run: |
           python -c "
           import replicate;
-          client = replicate.Client(token='${{ secrets.REPLICATE_API_TOKEN }}');
+          client = replicate.Client();
           model = client.models.get('erayyavuz/interior-ai');
-          model.versions.create(files=['your_model_path'])
+          model.versions.create(files=['predict.py', 'cog.yaml'])
           "
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
