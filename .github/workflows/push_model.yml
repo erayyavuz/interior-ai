@@ -16,12 +16,14 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-          which python  # Python yolunu kontrol et
           pip install replicate
+          which python  # Python yolunu kontrol et
           which replicate  # Replicate CLI'nin yolunu kontrol et
           venv/bin/replicate --version  # CLI'nin doğru çalıştığını doğrula
 
       - name: Push the model to Replicate
-        run: venv/bin/replicate push .
+        run: |
+          venv/bin/replicate push .
+          echo $?  # Hata kodunu kontrol et ve detayları kaydet
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
