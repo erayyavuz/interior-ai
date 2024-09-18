@@ -15,15 +15,13 @@ jobs:
       - name: Set up Virtual Environment and Install Replicate CLI
         run: |
           python -m venv venv
-          source venv/bin/activate
+          source venv/bin/activate  # Sanal ortamı etkinleştir
           pip install replicate
-          which python  # Python yolunu kontrol et
-          which replicate  # Replicate CLI'nin yolunu kontrol et
-          venv/bin/replicate --version  # CLI'nin doğru çalıştığını doğrula
+          replicate --version  # CLI'nin çalışıp çalışmadığını doğrula
 
       - name: Push the model to Replicate
         run: |
-          venv/bin/replicate push .
-          echo $?  # Hata kodunu kontrol et ve detayları kaydet
+          source venv/bin/activate  # Sanal ortamı tekrar etkinleştir
+          replicate push .
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
