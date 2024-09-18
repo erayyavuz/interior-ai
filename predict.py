@@ -12,13 +12,13 @@ from cog import BasePredictor, Input, Path
 from pathlib import Path as SysPath
 
 
-# Hugging Face API Token'ı ortam değişkeninden al
-HUGGINGFACE_TOKEN = os.environ.get("HUGGINGFACE_TOKEN")
+# Hugging Face API Token'ı doğrudan kod içinde tanımlama (Güvenli değil)
+HUGGINGFACE_TOKEN = "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"  # Token burada doğrudan tanımlandı
 
 if not HUGGINGFACE_TOKEN:
-    raise ValueError("Hugging Face API token bulunamadı. Lütfen HUGGINGFACE_TOKEN ortam değişkenini ayarlayın.")
+    raise ValueError("Hugging Face API token bulunamadı.")
 else:
-    print(f"Hugging Face API token başarıyla alındı: {HUGGINGFACE_TOKEN[:4]}...")  # Token'ın ilk dört karakterini yazdır
+    print(f"Hugging Face API token başarıyla alındı: {HUGGINGFACE_TOKEN[:4]}...")
     login(token=HUGGINGFACE_TOKEN)
 
 
