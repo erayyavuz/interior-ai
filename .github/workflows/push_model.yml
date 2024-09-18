@@ -12,13 +12,13 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v3
 
-      - name: Install Replicate CLI Globally
+      - name: Download and Install Replicate CLI
         run: |
-          sudo pip install replicate
-          sudo ln -s $(which replicate) /usr/local/bin/replicate  # Yolu global olarak ekle
-          replicate --version  # CLI'nin çalışıp çalışmadığını kontrol et
+          curl -o replicate https://github.com/replicate/replicate/releases/download/v0.1.0/replicate-linux-amd64
+          chmod +x replicate  # Çalıştırılabilir yap
+          ./replicate --version  # Doğru yüklenip yüklenmediğini kontrol et
 
       - name: Push the model to Replicate
-        run: replicate push .
+        run: ./replicate push .
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
