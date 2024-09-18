@@ -19,13 +19,11 @@ jobs:
 
       - name: Install Replicate CLI
         run: |
-          python -m pip install --user replicate
-          export PATH="$HOME/.local/bin:$PATH"
-          echo $PATH  # PATH’i kontrol et
-          find $HOME/.local/bin -name "replicate"  # Replicate komutunu bul
-          $HOME/.local/bin/replicate --version  # CLI’yi tam yolla çalıştır
+          python -m pip install replicate
+          python -m replicate --version  # Python modülü olarak replicate CLI'yi kontrol et
 
-      - name: Push the model to Replicate
-        run: $HOME/.local/bin/replicate push .
+      - name: Push the model to Replicate via Python
+        run: |
+          python -m replicate push .
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
