@@ -12,27 +12,24 @@ jobs:
     name: Push to Replicate
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Repository'i Klonla
         uses: actions/checkout@v4
 
-      - name: Install Dependencies
+      - name: Bağımlılıkları Yükle
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl
+          sudo apt-get install -y curl python3-pip
 
-      - name: Install Cog
+      - name: Cog Kurulumu
         run: |
-          set -e
-          curl -sSL https://raw.githubusercontent.com/replicate/cog/main/install.sh | bash
-          chmod +x ./cog
-          ./cog --version
+          pip3 install --user cog
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Verify Cog Installation
+      - name: Cog Kurulumunu Doğrula
         run: |
-          ls -la
-          ./cog --help
+          cog --version
 
-      - name: Push to Replicate
-        run: ./cog push r8.im/${{ inputs.model_name }}
+      - name: Replicate’a Push Et
+        run: cog push r8.im/${{ inputs.model_name }}
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
