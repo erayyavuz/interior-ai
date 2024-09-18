@@ -16,57 +16,23 @@ jobs:
       - name: Repository'i Klonla
         uses: actions/checkout@v4
 
-      # 2. Python Kurulumu
-      - name: Python Kurulumu
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'  # İhtiyacınıza göre Python sürümünü belirleyin
-
-      # 3. Sanal Ortam Oluşturma ve Cog Kurulumu
-      - name: Sanal Ortam Oluştur ve Cog Kur
+      # 2. Cog'u Yükle
+      - name: Cog'u Yükle
         run: |
-          python -m venv venv
-          echo "Sanal ortam oluşturuldu."
-          
-          # Sanal ortamın gerçekten var olduğunu kontrol edelim
-          if [ ! -d "venv" ]; then
-            echo "Sanal ortam oluşturulamadı."
-            exit 1
-          fi
-          
-          # Sanal ortamı etkinleştir
-          source venv/bin/activate
-          
-          # Pip'i güncelle
-          pip install --upgrade pip
-          
-          # Cog'u yükle
-          pip install cog
-        shell: bash
-
-      # 4. Cog'u Doğrula
-      - name: Cog'u Doğrula
-        run: |
-          source venv/bin/activate
-          which cog
+          sudo curl -L https://github.com/replicate/cog/releases/download/v0.9.23/cog_Linux_x86_64 -o /usr/local/bin/cog
+          sudo chmod +x /usr/local/bin/cog
           cog --version
-        shell: bash
 
-      # 5. Replicate’a Push Etme
+      # 3. Replicate’a Push Etme
       - name: Replicate’a Push Et
-        run: |
-          source venv/bin/activate
-          cog push r8.im/${{ inputs.model_name }}
+        run: cog push r8.im/${{ inputs.model_name }}
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
-        shell: bash
 
-      # 6. Ek Hata Ayıklama (Opsiyonel)
+      # 4. Hata Ayıklama (Opsiyonel)
       - name: Ek Hata Ayıklama
         if: failure()
         run: |
           echo "PATH: $PATH"
           which cog
           cog --version
-          pip show cog
-        shell: bash
