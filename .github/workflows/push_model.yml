@@ -14,10 +14,10 @@ jobs:
 
       - name: Install Replicate CLI
         run: |
-          curl -o replicate https://replicate.nyc3.digitaloceanspaces.com/cli/v1.0.3/replicate-linux-amd64
-          chmod +x replicate
-          mv replicate /usr/local/bin/replicate
-          replicate --version  # CLI'nin doğru yüklendiğini kontrol et
+          pip3 install replicate  # pip3 ile yükleme
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.local/bin:$PATH"
+          replicate --version  # CLI'nin çalıştığını doğrula
 
       - name: Push the model to Replicate
         run: replicate push .
