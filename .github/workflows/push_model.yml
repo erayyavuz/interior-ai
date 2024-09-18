@@ -17,12 +17,12 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Replicate Python Library
+      - name: Install Replicate CLI
         run: |
           python -m pip install replicate
+          replicate --version  # CLI'nin yüklendiğini doğrular
 
-      - name: Push the model to Replicate via Python
-        run: |
-          python -c "import replicate; replicate.Client().models.create_version('path_to_model')"
+      - name: Push the model to Replicate
+        run: replicate push .
         env:
-          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_A
