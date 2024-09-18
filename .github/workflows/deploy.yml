@@ -3,7 +3,7 @@ name: Push to Replicate
 on:
   workflow_dispatch:
     inputs:
-      model_name:
+      model_name: interior-ai
         description: 'erayyavuz/interior-ai'
         required: true
 
@@ -20,13 +20,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl python3-pip
 
-      - name: Cog Kurulumu
+      - name: Cog Kurulumu (pip ile)
         run: |
           pip3 install --user cog
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Cog Kurulumunu Doğrula
+      - name: Cog'un Yüklü Olduğunu Doğrula
         run: |
+          echo "PATH: $PATH"
+          echo "Listing ~/.local/bin:"
+          ls -la $HOME/.local/bin
+          echo "Which cog:"
+          which cog
+          echo "Cog versiyonu:"
           cog --version
 
       - name: Replicate’a Push Et
