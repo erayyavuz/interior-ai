@@ -27,6 +27,8 @@ jobs:
       - name: Replicate’a Push Et
         run: cog push r8.im/${{ inputs.model_name }}
         env:
+        env:
+          HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
 
       # 4. Hata Ayıklama (Opsiyonel)
