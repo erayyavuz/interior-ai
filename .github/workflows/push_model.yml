@@ -20,7 +20,7 @@ jobs:
         run: |
           python -c "
           import replicate;
-          client = replicate.Client(token='${{ secrets.REPLICATE_API_TOKEN }}');
+          client = replicate.Client();
           model = client.models.get('erayyavuz/interior-ai');
           model.versions.create(files=['your_model_path'])
           "
