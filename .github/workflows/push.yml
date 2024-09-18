@@ -16,13 +16,8 @@ jobs:
         run: |
           pip install replicate
 
-      - name: Push the model via Python
-        run: |
-          python -c "
-          import replicate;
-          client = replicate.Client();
-          model = client.models.get('erayyavuz/interior-ai');
-          model_version = model.upload_version(files=['./predict.py', './cog.yaml'])
-          "
+      - name: Push to replicate
+        run: cog push r8.im/${{ inputs.model_name }}
+        
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
