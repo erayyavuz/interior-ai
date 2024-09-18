@@ -10,21 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v3  # Kodu indirir
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'  # Python sürümünü ayarlar
+          python-version: '3.x'
 
       - name: Install Replicate CLI
         run: |
-          python -m pip install --user replicate  # Replicate CLI'yi yükler
-          echo "$HOME/.local/bin" >> $GITHUB_PATH  # Yüklendiği dizini PATH'e ekler
-          export PATH="$HOME/.local/bin:$PATH"  # CLI'nin bulunduğu dizini PATH'e ekler
-          replicate --version  # Yüklemenin başarılı olduğunu doğrular
+          python -m pip install --user replicate
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.local/bin:$PATH"
+          ~/.local/bin/replicate --version  # CLI'nin tam yolunu kullanarak versiyonu kontrol et
 
       - name: Push the model to Replicate
-        run: replicate push  # Modeli Replicate'e yükler
+        run: ~/.local/bin/replicate push  # Tam yol ile komutu çalıştır
         env:
-          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}  # API token'ı kullanır
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
