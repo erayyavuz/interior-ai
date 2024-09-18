@@ -48,16 +48,7 @@ jobs:
       # 4. Cog'u Doğrula
       - name: Cog'u Doğrula
         run: |
-          # PATH değişkenini kontrol edin
-          echo "PATH: $PATH"
-          
-          # ~/.local/bin dizinindeki dosyaları listeleyin
-          ls -la $HOME/.local/bin
-          
-          # 'cog' komutunun yerini bulun
           which cog
-          
-          # 'cog' versiyonunu kontrol edin
           cog --version
 
       # 5. Replicate’a Push Et
@@ -65,13 +56,3 @@ jobs:
         run: cog push r8.im/${{ inputs.model_name }}
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
-
-      # 6. (Opsiyonel) Ek Hata Ayıklama Adımları
-      - name: Ek Hata Ayıklama
-        if: failure()
-        run: |
-          echo "PATH: $PATH"
-          ls -la $HOME/.local/bin
-          which cog
-          cog --version
-          pip show cog
