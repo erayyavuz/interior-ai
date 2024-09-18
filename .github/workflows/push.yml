@@ -1,25 +1,35 @@
 name: Push to Replicate
- 
+
 on:
   workflow_dispatch:
     inputs:
-      model_name: interior-ai
+      model_name:
         description: 'erayyavuz/interior-ai'
         required: true
- 
+
 jobs:
   push_to_replicate:
     name: Push to Replicate
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
 
       - name: Install Cog
         run: |
-          curl -o cog https://raw.githubusercontent.com/replicate/cog/main/install.sh | bash
-          chmod +x cog
+          curl -sSL https://raw.githubusercontent.com/replicate/cog/main/install.sh | bash
+          chmod +x ./cog
           ./cog --version
+
+      - name: Verify Cog Installation
+        run: |
+          ls -la
+          ./cog --help
 
       - name: Push to Replicate
         run: ./cog push r8.im/${{ inputs.model_name }}
