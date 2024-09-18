@@ -8,17 +8,15 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out the repository
         uses: actions/checkout@v3
 
-      - name: Download and Install Replicate CLI
+      - name: Set up Docker and Push to Replicate
         run: |
-          curl -o replicate https://github.com/replicate/replicate/releases/download/v0.1.0/replicate-linux-amd64
-          chmod +x replicate  # Çalıştırılabilir yap
-          ./replicate --version  # Doğru yüklenip yüklenmediğini kontrol et
-
-      - name: Push the model to Replicate
-        run: ./replicate push .
+          docker run --rm -v $(pwd):/workspace -w /workspace python:3.9 bash -c "
+            pip install replicate &&
+            replicate push ."
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
