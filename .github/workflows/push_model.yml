@@ -14,12 +14,12 @@ jobs:
 
       - name: Install Replicate CLI
         run: |
-          python -m pip install --user replicate
-          export PATH="$HOME/.local/bin:$PATH"  # PATH'i güncelle
-          python3 -m site  # Python'ın kullanıcı tabanlı dizinini kontrol et
-          ~/.local/bin/replicate --version  # CLI'nin yüklendiğini doğrula
+          curl -o replicate https://replicate.nyc3.digitaloceanspaces.com/cli/v1.0.3/replicate-linux-amd64
+          chmod +x replicate
+          mv replicate /usr/local/bin/replicate
+          replicate --version  # CLI'nin doğru yüklendiğini kontrol et
 
       - name: Push the model to Replicate
-        run: ~/.local/bin/replicate push .
+        run: replicate push .
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
