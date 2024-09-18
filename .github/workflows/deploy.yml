@@ -3,7 +3,7 @@ name: Push to Replicate
 on:
   workflow_dispatch:
     inputs:
-      model_name:
+      model_name: interior-ai
         description: 'erayyavuz/interior-ai'
         required: true
 
@@ -16,38 +16,34 @@ jobs:
       - name: Repository'i Klonla
         uses: actions/checkout@v4
 
-      # 2. Python Kurulumu
-      - name: Python Kurulumu
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'  # İhtiyacınıza göre Python sürümünü belirleyin
-
-      # 3. Sanal Ortam Oluşturma ve Cog Kurulumu
-      - name: Sanal Ortam Oluştur ve Cog Kur
+      # 2. Bağımlılıkları Yükle
+      - name: Bağımlılıkları Yükle
         run: |
-          # Sanal ortam oluştur
-          python -m venv venv
-          
-          # Sanal ortamı etkinleştir
-          source venv/bin/activate
-          
-          # pip'i güncelle
-          pip install --upgrade pip
-          
-          # Cog'u sanal ortama kur
-          pip install cog
-          
-          # Kurulumu doğrula
-          ls -la venv/bin
-          venv/bin/cog --version
+          sudo apt-get update
+          sudo apt-get install -y curl python3-pip git
 
-      # 4. Replicate’a Push Etme
+      # 3. pipx Kurulumu
+      - name: pipx Kurulumu
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --user pipx
+          python3 -m pipx ensurepath
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      # 4. Cog Repository'sini Klonla ve Kur
+      - name: Cog Repository'sini Klonla ve Kur
+        run: |
+          git clone https://github.com/replicate/cog.git
+          cd cog
+          pipx install .
+
+      # 5. Cog'u Doğrula
+      - name: Cog'u Doğrula
+        run: |
+          cog --version
+
+      # 6. Replicate’a Push Et
       - name: Replicate’a Push Et
-        run: |
-          # Sanal ortamı etkinleştir
-          source venv/bin/activate
-          
-          # Replicate’a push et
-          venv/bin/cog push r8.im/${{ inputs.model_name }}
+        run: cog push r8.im/${{ inputs.model_name }}
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
