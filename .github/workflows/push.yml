@@ -23,14 +23,23 @@ jobs:
           sudo chmod +x /usr/local/bin/cog
           cog --version
 
-      # 3. Replicate’a Push Etme
+      # 3. Hugging Face ve Replicate Token'larını Test Et
+      - name: Hugging Face ve Replicate Token'larını Kontrol Et
+        run: |
+          echo "HUGGINGFACE_TOKEN: $HUGGINGFACE_TOKEN"
+          echo "REPLICATE_API_TOKEN: $REPLICATE_API_TOKEN"
+        env:
+          HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+
+      # 4. Replicate’a Push Etme
       - name: Replicate’a Push Et
         run: cog push r8.im/${{ inputs.model_name }}
         env:
           HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
 
-      # 4. Hata Ayıklama (Opsiyonel)
+      # 5. Hata Ayıklama (Opsiyonel)
       - name: Ek Hata Ayıklama
         if: failure()
         run: |
