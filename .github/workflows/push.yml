@@ -3,8 +3,8 @@ name: Push to Replicate
 on:
   workflow_dispatch:
     inputs:
-      model_name: interior-ai
-        description: erayyavuz/interior-ai
+      model_name: 'interior-ai'
+        description: 'erayyavuz/interior-ai'
         required: true
 
 jobs:
