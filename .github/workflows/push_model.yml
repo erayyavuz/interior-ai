@@ -17,6 +17,12 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Install Replicate CLI
+        run: |
+          python -m pip install replicate
+          python -m replicate --version  # Python modülü olarak replicate CLI'yi kontrol et
+
+
       - name: Push the model to Replicate
         run: replicate push .
         env:
