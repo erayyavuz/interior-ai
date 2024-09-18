@@ -1,30 +1,38 @@
-name: Push Model to Replicate
+name: Push to Replicate
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      model_name:
+        description: 'erayyavuz/interior-ai'
+        required: true
 
 jobs:
-  deploy:
+  push_to_replicate:
+    name: Push to Replicate
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Install Replicate CLI
+      - name: Install Dependencies
         run: |
-          python -m pip install --user replicate
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          export PATH="$HOME/.local/bin:$PATH"
-          ~/.local/bin/replicate --version  # CLI'nin tam yolunu kullanarak versiyonu kontrol et
+          sudo apt-get update
+          sudo apt-get install -y curl
 
-      - name: Push the model to Replicate
-        run: ~/.local/bin/replicate push  # Tam yol ile komutu çalıştır
+      - name: Install Cog
+        run: |
+          set -e
+          curl -sSL https://raw.githubusercontent.com/replicate/cog/main/install.sh | bash
+          chmod +x ./cog
+          ./cog --version
+
+      - name: Verify Cog Installation
+        run: |
+          ls -la
+          ./cog --help
+
+      - name: Push to Replicate
+        run: ./cog push r8.im/${{ inputs.model_name }}
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
