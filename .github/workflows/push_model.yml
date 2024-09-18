@@ -19,10 +19,9 @@ jobs:
 
       - name: Install Replicate CLI
         run: |
-          python -m pip install replicate
+          python -m pip install --user replicate
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.local/bin:$PATH"
           replicate --version
 
       - name: Push the model to Replicate
-        run: replicate push
-        env:
-          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
