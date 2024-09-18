@@ -14,9 +14,12 @@ from pathlib import Path as SysPath
 
 # Hugging Face API Token'ı ortam değişkeninden al
 HUGGINGFACE_TOKEN = os.environ.get("HUGGINGFACE_TOKEN")
-if HUGGINGFACE_TOKEN is None:
-    raise ValueError("Lütfen HUGGINGFACE_TOKEN ortam değişkenini ayarlayın.")
-login(token=HUGGINGFACE_TOKEN)
+
+if not HUGGINGFACE_TOKEN:
+    raise ValueError("Hugging Face API token bulunamadı. Lütfen HUGGINGFACE_TOKEN ortam değişkenini ayarlayın.")
+else:
+    login(token=HUGGINGFACE_TOKEN)
+
 
 # PyTorch CUDA bellek yönetimi ayarı
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:32"
