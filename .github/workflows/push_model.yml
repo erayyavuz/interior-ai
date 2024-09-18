@@ -14,10 +14,8 @@ jobs:
 
       - name: Install Replicate CLI
         run: |
-          pip3 install replicate  # pip3 ile yükleme
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          export PATH="$HOME/.local/bin:$PATH"
-          replicate --version  # CLI'nin çalıştığını doğrula
+          sudo pip install replicate  # Global olarak yükle
+          replicate --version  # CLI'nin doğru yüklendiğini kontrol et
 
       - name: Push the model to Replicate
         run: replicate push .
