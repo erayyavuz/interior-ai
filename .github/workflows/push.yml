@@ -26,8 +26,19 @@ jobs:
       # 3. Hugging Face ve Replicate Token'larını Test Et
       - name: Hugging Face ve Replicate Token'larını Kontrol Et
         run: |
-          echo "HUGGINGFACE_TOKEN: $HUGGINGFACE_TOKEN"
-          echo "REPLICATE_API_TOKEN: $REPLICATE_API_TOKEN"
+          if [ -z "$HUGGINGFACE_TOKEN" ]; then
+            echo "Hugging Face API token bulunamadı!"
+            exit 1
+          else
+            echo "Hugging Face API token bulundu: $HUGGINGFACE_TOKEN"
+          fi
+
+          if [ -z "$REPLICATE_API_TOKEN" ]; then
+            echo "Replicate API token bulunamadı!"
+            exit 1
+          else
+            echo "Replicate API token bulundu: $REPLICATE_API_TOKEN"
+          fi
         env:
           HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
