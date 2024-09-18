@@ -8,15 +8,21 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out the repository
         uses: actions/checkout@v3
 
-      - name: Set up Docker and Push to Replicate
+      - name: Install Dependencies
         run: |
-          docker run --rm -v $(pwd):/workspace -w /workspace python:3.9 bash -c "
-            pip install replicate &&
-            replicate push ."
+          pip install replicate
+
+      - name: Push the model via Python
+        run: |
+          python -c "
+          import replicate;
+          client = replicate.Client(token='${{ secrets.REPLICATE_API_TOKEN }}');
+          model = client.models.get('erayyavuz/interior-ai');
+          model.versions.create(files=['your_model_path'])
+          "
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
