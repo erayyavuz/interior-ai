@@ -12,12 +12,14 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v3
 
-      - name: Install Replicate CLI
+      - name: Set up Virtual Environment and Install Replicate CLI
         run: |
-          sudo pip install replicate  # Global olarak yükle
-          replicate --version  # CLI'nin doğru yüklendiğini kontrol et
+          python -m venv venv
+          source venv/bin/activate
+          pip install replicate
+          venv/bin/replicate --version  # CLI'nin çalıştığını kontrol et
 
       - name: Push the model to Replicate
-        run: replicate push .
+        run: venv/bin/replicate push .
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
