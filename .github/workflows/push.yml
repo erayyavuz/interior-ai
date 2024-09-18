@@ -61,13 +61,13 @@ jobs:
           head -n 1 $HOME/.local/bin/cog
           cog --version
 
-      # 5. Replicate’a Push Et
+      # 5. Replicate’a Push Etme
       - name: Replicate’a Push Et
         run: cog push r8.im/${{ inputs.model_name }}
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
 
-      # 6. (Opsiyonel) Ek Hata Ayıklama Adımları
+      # 6. Ek Hata Ayıklama (Opsiyonel)
       - name: Ek Hata Ayıklama
         if: failure()
         run: |
