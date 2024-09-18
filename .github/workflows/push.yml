@@ -31,9 +31,17 @@ jobs:
           
           # İndirme URL'sini oluştur
           COG_URL="https://github.com/replicate/cog/releases/download/${COG_VERSION}/cog-linux-amd64"
+          echo "Cog indirilecek URL: $COG_URL"
           
           # Cog'u indir
           curl -L -o cog ${COG_URL}
+          
+          # İndirilen dosyanın doğru şekilde indirildiğini doğrulamak için kontrol et
+          if ! file cog | grep -q "ELF"; then
+            echo "Cog dosyası doğru şekilde indirilemedi."
+            cat cog
+            exit 1
+          fi
           
           # Cog'u çalıştırılabilir yap
           chmod +x cog
@@ -49,6 +57,8 @@ jobs:
       - name: Cog'u Doğrula
         run: |
           which cog
+          file $HOME/.local/bin/cog
+          head -n 1 $HOME/.local/bin/cog
           cog --version
 
       # 5. Replicate’a Push Et
@@ -56,3 +66,14 @@ jobs:
         run: cog push r8.im/${{ inputs.model_name }}
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+
+      # 6. (Opsiyonel) Ek Hata Ayıklama Adımları
+      - name: Ek Hata Ayıklama
+        if: failure()
+        run: |
+          echo "PATH: $PATH"
+          ls -la $HOME/.local/bin
+          which cog
+          cog --version
+          file $HOME/.local/bin/cog
+          head -n 5 $HOME/.local/bin/cog
