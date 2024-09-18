@@ -26,9 +26,23 @@ jobs:
       - name: Sanal Ortam Oluştur ve Cog Kur
         run: |
           python -m venv venv
+          echo "Sanal ortam oluşturuldu."
+          
+          # Sanal ortamın gerçekten var olduğunu kontrol edelim
+          if [ ! -d "venv" ]; then
+            echo "Sanal ortam oluşturulamadı."
+            exit 1
+          fi
+          
+          # Sanal ortamı etkinleştir
           source venv/bin/activate
+          
+          # Pip'i güncelle
           pip install --upgrade pip
+          
+          # Cog'u yükle
           pip install cog
+        shell: bash
 
       # 4. Cog'u Doğrula
       - name: Cog'u Doğrula
@@ -36,6 +50,7 @@ jobs:
           source venv/bin/activate
           which cog
           cog --version
+        shell: bash
 
       # 5. Replicate’a Push Etme
       - name: Replicate’a Push Et
@@ -44,13 +59,14 @@ jobs:
           cog push r8.im/${{ inputs.model_name }}
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+        shell: bash
 
       # 6. Ek Hata Ayıklama (Opsiyonel)
       - name: Ek Hata Ayıklama
         if: failure()
         run: |
-          source venv/bin/activate
           echo "PATH: $PATH"
           which cog
           cog --version
           pip show cog
+        shell: bash
