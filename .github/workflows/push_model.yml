@@ -22,6 +22,6 @@ jobs:
 
       - name: Push the model to Replicate via Python
         run: |
-          python -c "import replicate; client = replicate.Client(); client.models.create_version('your_model_path')"
+          python -c "import replicate; client = replicate.Client(); model = client.models.get('your_model_name'); model.versions.create(path='your_model_path')"
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
