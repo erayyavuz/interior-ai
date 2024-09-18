@@ -12,19 +12,14 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
       - name: Install Replicate CLI
         run: |
-          python -m pip install --user replicate
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          export PATH="$HOME/.local/bin:$PATH"
-          ~/.local/bin/replicate --version  # CLI'nin doğru yüklendiğini kontrol et
+          pip install replicate
+          echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+          export PATH="$(python3 -m site --user-base)/bin:$PATH"
+          replicate --version  # CLI'nin doğru yüklendiğini kontrol et
 
       - name: Push the model to Replicate
-        run: ~/.local/bin/replicate push .
+        run: replicate push .
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
