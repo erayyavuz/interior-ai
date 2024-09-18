@@ -1,5 +1,5 @@
 build:
-  python_version: "3.8"  # Python sürümü
+  python_version: "3.8"
   python_packages:
     - torch
     - diffusers
@@ -9,8 +9,6 @@ build:
     - numpy
 
 predict: "predict.py:Predictor"
-
-gpu: true  # GPU kullanımını etkinleştirir
 
 inputs:
   - name: input
