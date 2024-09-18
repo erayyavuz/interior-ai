@@ -17,12 +17,14 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Replicate Python Library
+      - name: Install Replicate CLI
         run: |
-          python -m pip install replicate
+          python -m pip install --user replicate
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.local/bin:$PATH"
+          ~/.local/bin/replicate --version  # CLI'yi doğrula
 
-      - name: Push the model to Replicate via Python
-        run: |
-          python -c "import replicate; replicate.models.push('path_to_model')"
+      - name: Push the model to Replicate via CLI
+        run: ~/.local/bin/replicate push  # CLI ile model yükleme
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
