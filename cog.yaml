@@ -1,0 +1,40 @@
+build:
+  python_version: "3.8"  # Python sürümü
+  python_packages:
+    - torch
+    - diffusers
+    - controlnet-aux
+    - huggingface-hub
+    - pillow
+    - numpy
+
+predict:
+  - name: input
+    type: path
+    help: "Input image path"
+  - name: prompt
+    type: string
+    help: "Prompt for image generation"
+  - name: negative_prompt
+    type: string
+    help: "Negative prompt for image generation"
+  - name: num_inference_steps
+    type: int
+    default: 50
+    help: "Number of inference steps"
+  - name: guidance_scale
+    type: float
+    default: 7.5
+    help: "Guidance scale for generation"
+  - name: strength
+    type: float
+    default: 0.8
+    help: "Strength for img2img"
+  - name: seed
+    type: int
+    default: null
+    help: "Random seed for reproducibility"
+
+environment:
+  GPU: true
+  CUDA: 11.3
