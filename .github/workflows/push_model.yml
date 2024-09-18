@@ -17,40 +17,9 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Replicate Python Library
+      - name: Install Replicate CLI
         run: |
-          python -m pip install replicate
-
-      - name: Push the model to Replicate via Python
-        run: |
-          python -c "import replicate; client = replicate.Client(); client.models.create('path_to_model')"
-        env:
-          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
-name: Push Model to Replicate
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Install Replicate Python Library
-        run: |
-          python -m pip install replicate
-
-      - name: Push the model to Replicate via Python
-        run: |
-          python -c "import replicate; client = replicate.Client(); client.models.create('path_to_model')"
-        env:
-          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+          python -m pip install --user replicate
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.local/bin:$PATH"
+          ~/.local/bin/rep
