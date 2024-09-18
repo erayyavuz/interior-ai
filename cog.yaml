@@ -10,9 +10,7 @@ build:
 
 predict: "predict.py:Predictor"
 
-environment:
-  GPU: true
-  CUDA: 11.3
+gpu: true  # GPU kullanımını etkinleştirir
 
 inputs:
   - name: input
