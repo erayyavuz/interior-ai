@@ -12,19 +12,16 @@ jobs:
     name: Push to Replicate
     runs-on: ubuntu-latest
     steps:
-      - name: Free disk pace
-        uses: jlumbroso/free-disk-space@v1.3.1
-        with:
-          tool-cache: false
-          docker-images: false
- 
       - name: Checkout
         uses: actions/checkout@v4
- 
-      - name: Setup Cog
-        uses: replicate/setup-cog@v2
-        with:
-          token: ${{ secrets.REPLICATE_API_TOKEN }}
-        
+
+      - name: Install Cog
+        run: |
+          curl -o cog https://raw.githubusercontent.com/replicate/cog/main/install.sh | bash
+          chmod +x cog
+          ./cog --version
+
       - name: Push to Replicate
-        run: cog push r8.im/${{ inputs.model_name }}
+        run: ./cog push r8.im/${{ inputs.model_name }}
+        env:
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
