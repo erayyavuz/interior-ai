@@ -22,11 +22,24 @@ jobs:
 
       - name: Cog Kurulumu
         run: |
-          pip3 install --user cog
+          # 'install.sh' betiğini doğrudan çalıştırın
+          curl -sSfL https://raw.githubusercontent.com/replicate/cog/main/install.sh | bash
+          
+          # ~/.local/bin dizinini PATH'e ekleyin
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Cog Kurulumunu Doğrula
         run: |
+          # PATH değişkenini kontrol edin
+          echo "PATH: $PATH"
+          
+          # ~/.local/bin dizinindeki dosyaları listeleyin
+          ls -la $HOME/.local/bin
+          
+          # 'cog' komutunun yerini bulun
+          which cog
+          
+          # 'cog' versiyonunu kontrol edin
           cog --version
 
       - name: Replicate’a Push Et
