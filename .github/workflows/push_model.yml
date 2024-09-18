@@ -14,12 +14,12 @@ jobs:
 
       - name: Install Replicate CLI
         run: |
-          pip install replicate
-          echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
-          export PATH="$(python3 -m site --user-base)/bin:$PATH"
-          replicate --version  # CLI'nin doğru yüklendiğini kontrol et
+          python -m pip install replicate
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.local/bin:$PATH"
+          ~/.local/bin/replicate --version  # CLI'nin doğru yüklendiğini kontrol et
 
       - name: Push the model to Replicate
-        run: replicate push .
+        run: ~/.local/bin/replicate push .
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
