@@ -16,8 +16,10 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
+          which python  # Python yolunu kontrol et
           pip install replicate
-          venv/bin/replicate --version  # CLI'nin çalıştığını kontrol et
+          which replicate  # Replicate CLI'nin yolunu kontrol et
+          venv/bin/replicate --version  # CLI'nin doğru çalıştığını doğrula
 
       - name: Push the model to Replicate
         run: venv/bin/replicate push .
