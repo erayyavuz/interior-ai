@@ -1,42 +1,26 @@
+# Configuration for Cog ⚙️
+# Reference: https://cog.run/yaml
+
 build:
-  python_version: "3.8"
+  gpu: true  # GPU kullanımını etkinleştirir
+  system_packages:
+    - "libgl1-mesa-glx"  # OpenGL kütüphaneleri
+    - "libglib2.0-0"  # Glib kütüphanesi
+  python_version: "3.11"  # Python sürümü
   python_packages:
-    - torch
-    - diffusers
-    - controlnet-aux
-    - huggingface-hub
-    - pillow
-    - numpy
+    - "diffusers==0.25.0"
+    - "xformers==0.0.23.post1"
+    - "transformers==4.36.2"
+    - "torchvision==0.16.2"
+    - "accelerate==0.26.1"
+    - "opencv-python==4.9.0.80"
+    - "scipy==1.11.4"
+    - "triton==2.1.0"
+    - "altair==4.1.0"
+    - "pandas==2.1.4"
+    - "controlnet-aux"
+    - "Pillow"
+    - "mediapipe"
 
+# predict.py defines how predictions are run on your model
 predict: "predict.py:Predictor"
-
-inputs:
-  - name: input
-    type: path
-    help: "Input image path"
-  - name: output
-    type: path
-    help: "Output image path"
-  - name: prompt
-    type: string
-    help: "Prompt for image generation"
-  - name: negative_prompt
-    type: string
-    help: "Negative prompt for image generation"
-    default: ""
-  - name: num_inference_steps
-    type: int
-    default: 50
-    help: "Number of inference steps"
-  - name: guidance_scale
-    type: float
-    default: 7.5
-    help: "Guidance scale for generation"
-  - name: strength
-    type: float
-    default: 0.8
-    help: "Strength for img2img generation"
-  - name: seed
-    type: int
-    help: "Random seed for reproducibility"
-    default: null
