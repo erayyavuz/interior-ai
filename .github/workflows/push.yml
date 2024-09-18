@@ -16,38 +16,38 @@ jobs:
       - name: Repository'i Klonla
         uses: actions/checkout@v4
 
-      # 2. Bağımlılıkları Yükle
-      - name: Bağımlılıkları Yükle
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl python3-pip
+      # 2. Python Kurulumu
+      - name: Python Kurulumu
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'  # İhtiyacınıza göre Python sürümünü belirleyin
 
-      # 3. Cog Kurulumu
-      - name: Cog Kurulumu
+      # 3. Sanal Ortam Oluşturma ve Cog Kurulumu
+      - name: Sanal Ortam Oluştur ve Cog Kur
         run: |
-          # 'install.sh' betiğini doğru şekilde çalıştırın
-          curl -sSfL https://raw.githubusercontent.com/replicate/cog/main/install.sh | bash
+          # Sanal ortam oluştur
+          python -m venv venv
           
-          # ~/.local/bin dizinini PATH'e ekleyin
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          # Sanal ortamı etkinleştir
+          source venv/bin/activate
+          
+          # pip'i güncelle
+          pip install --upgrade pip
+          
+          # Cog'u sanal ortama kur
+          pip install cog
+          
+          # Kurulumu doğrula
+          ls -la venv/bin
+          venv/bin/cog --version
 
-      # 4. Cog Kurulumunu Doğrula
-      - name: Cog Kurulumunu Doğrula
-        run: |
-          # PATH değişkenini kontrol edin
-          echo "PATH: $PATH"
-          
-          # ~/.local/bin dizinindeki dosyaları listeleyin
-          ls -la $HOME/.local/bin
-          
-          # 'cog' komutunun yerini bulun
-          which cog
-          
-          # 'cog' versiyonunu kontrol edin
-          cog --version
-
-      # 5. Replicate’a Push Et
+      # 4. Replicate’a Push Etme
       - name: Replicate’a Push Et
-        run: cog push r8.im/${{ inputs.model_name }}
+        run: |
+          # Sanal ortamı etkinleştir
+          source venv/bin/activate
+          
+          # Replicate’a push et
+          venv/bin/cog push r8.im/${{ inputs.model_name }}
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
