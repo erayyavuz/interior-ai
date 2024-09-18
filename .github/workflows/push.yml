@@ -16,54 +16,32 @@ jobs:
       - name: Repository'i Klonla
         uses: actions/checkout@v4
 
-      # 2. Bağımlılıkları Yükle
-      - name: Bağımlılıkları Yükle
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl unzip
+      # 2. Python Kurulumu
+      - name: Python Kurulumu
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'  # İhtiyacınıza göre Python sürümünü belirleyin
 
-      # 3. Cog'u İndir ve Kur
-      - name: Cog'u İndir ve Kur
+      # 3. Sanal Ortam Oluşturma ve Cog Kurulumu
+      - name: Sanal Ortam Oluştur ve Cog Kur
         run: |
-          # En son sürümü almak için GitHub API kullanın
-          COG_VERSION=$(curl -s https://api.github.com/repos/replicate/cog/releases/latest | grep tag_name | cut -d '"' -f 4)
-          echo "Cog sürümü: $COG_VERSION"
-          
-          # İndirme URL'sini oluştur
-          COG_URL="https://github.com/replicate/cog/releases/download/${COG_VERSION}/cog-linux-amd64"
-          echo "Cog indirilecek URL: $COG_URL"
-          
-          # Cog'u indir
-          curl -L -o cog ${COG_URL}
-          
-          # İndirilen dosyanın doğru şekilde indirildiğini doğrulamak için kontrol et
-          if ! file cog | grep -q "ELF"; then
-            echo "Cog dosyası doğru şekilde indirilemedi."
-            cat cog
-            exit 1
-          fi
-          
-          # Cog'u çalıştırılabilir yap
-          chmod +x cog
-          
-          # Cog'u ~/.local/bin dizinine taşı
-          mkdir -p $HOME/.local/bin
-          mv cog $HOME/.local/bin/
-          
-          # ~/.local/bin dizinini PATH'e ekle
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install cog
 
       # 4. Cog'u Doğrula
       - name: Cog'u Doğrula
         run: |
+          source venv/bin/activate
           which cog
-          file $HOME/.local/bin/cog
-          head -n 1 $HOME/.local/bin/cog
           cog --version
 
       # 5. Replicate’a Push Etme
       - name: Replicate’a Push Et
-        run: cog push r8.im/${{ inputs.model_name }}
+        run: |
+          source venv/bin/activate
+          cog push r8.im/${{ inputs.model_name }}
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
 
@@ -71,9 +49,8 @@ jobs:
       - name: Ek Hata Ayıklama
         if: failure()
         run: |
+          source venv/bin/activate
           echo "PATH: $PATH"
-          ls -la $HOME/.local/bin
           which cog
           cog --version
-          file $HOME/.local/bin/cog
-          head -n 5 $HOME/.local/bin/cog
+          pip show cog
